@@ -1,0 +1,37 @@
+<div
+  echarts
+  [options]="options"
+  [theme]="'dark'"
+  [merge]="updateOptions"
+  class="demo-chart"
+></div>
+<nz-divider></nz-divider>
+<div
+  echarts
+  [options]="optionsPolar"
+  [theme]="'dark'"
+  [merge]="updateOptionsPolar"
+  class="demo-chart"
+></div>
+<nz-card nzTitle="Parameters">
+  <div [ngStyle]="style">
+    <nz-slider
+      nzVertical
+      [(ngModel)]="ampI"
+      [nzMarks]="marksAmpI"
+      [nzStep]="5"
+      [nzMax]="100"
+      (ngModelChange)="onIAmpChange($event)"
+    ></nz-slider>
+  </div>
+  <div [ngStyle]="style">
+    <nz-slider
+      nzVertical
+      [(ngModel)]="ampQ"
+      [nzMarks]="marksAmpQ"
+      [nzStep]="5"
+      [nzMax]="100"
+      (ngModelChange)="onQAmpChange($event)"
+    ></nz-slider>
+  </div>
+</nz-card>
