@@ -1,37 +1,56 @@
-<div
-  echarts
-  [options]="options"
-  [theme]="'dark'"
-  [merge]="updateOptions"
-  class="demo-chart"
-></div>
+<div nz-row nzJustify="space-between" nzAlign="top">
+  <div nz-col nzSpan="4">
+      <h2>Change Amplitudes</h2>
+      <h3>Amplitude I</h3>
+      <nz-slider
+        [(ngModel)]="ampI"
+        [nzMarks]="marks"
+        [nzStep]="0.1"
+        [nzMax]="1"
+        [nzMin]="-1"
+        (ngModelChange)="recalcCharts()"
+        ></nz-slider>
+      <br/>
+      <h3>Amplitude Q</h3>
+      <nz-slider
+        width="100%"
+        [(ngModel)]="ampQ"
+        [nzMarks]="marks"
+        [nzStep]="0.1"
+        [nzMax]="1"
+        [nzMin]="-1"
+        (ngModelChange)="recalcCharts()"
+        ></nz-slider>
+    </div>
+  <div nz-col nzSpan="1"></div>
+  <div nz-col nzSpan="19">
+    <div
+      echarts
+      [options]="options"
+      [theme]="'light'"
+      [merge]="updateOptions"
+      ></div>
+  </div>
+</div>
 <nz-divider></nz-divider>
-<div
-  echarts
-  [options]="optionsPolar"
-  [theme]="'dark'"
-  [merge]="updateOptionsPolar"
-  class="demo-chart"
-></div>
-<nz-card nzTitle="Parameters">
-  <div [ngStyle]="style">
-    <nz-slider
-      nzVertical
-      [(ngModel)]="ampI"
-      [nzMarks]="marksAmpI"
-      [nzStep]="5"
-      [nzMax]="100"
-      (ngModelChange)="onIAmpChange($event)"
-    ></nz-slider>
+<div nz-row nzAlign="top" nzJustify="space-evenly">
+    <div style='width:300px'>
+    <h2>Phasor Diagram of IQ Values</h2>
+      <div
+        echarts
+        [options]="optionsPolar"
+        [theme]="'light'"
+        [merge]="updateOptionsPolar"
+        ></div>
+    </div>
+
+  <div style='width:800px'>
+    <h2>3D Diagram of IQ Values</h2>
+    <div
+      echarts
+      [options]="options3d"
+      [theme]="'light'"
+      [merge]="updateOptions3d"
+      ></div>
   </div>
-  <div [ngStyle]="style">
-    <nz-slider
-      nzVertical
-      [(ngModel)]="ampQ"
-      [nzMarks]="marksAmpQ"
-      [nzStep]="5"
-      [nzMax]="100"
-      (ngModelChange)="onQAmpChange($event)"
-    ></nz-slider>
-  </div>
-</nz-card>
+</div>

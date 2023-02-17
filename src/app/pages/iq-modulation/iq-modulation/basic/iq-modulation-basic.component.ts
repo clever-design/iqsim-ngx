@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { of, interval, concatMap } from 'rxjs';
 declare const require: any; // DEMO IGNORE
 
 @Component({
@@ -9,14 +10,17 @@ declare const require: any; // DEMO IGNORE
 export class IqModulationBasicComponent implements OnInit {
   options: any;
   optionsPolar: any;
+  options3d: any;
   updateOptions: any;
   updateOptionsPolar: any;
-  ampI: number = 100;
-  ampQ: number = 100;
-  private data1: any[];
-  private data2: any[];
-  private data3: any[];
-  private data4: any[];
+  updateOptions3d: any;
+  ampI: number = 1;
+  ampQ: number = 1;
+  private dataI: any[];
+  private dataQ: any[];
+  private dataSumIQ: any[];
+  private dataIQ: any[];
+  private data3D: any[];
   private xAxisData: any[];
 
   constructor() {}
@@ -27,84 +31,50 @@ export class IqModulationBasicComponent implements OnInit {
     marginLeft: '70px',
   };
 
-  marksAmpQ = {
-    0: {
-      label: '<strong>0 %</strong>',
-    },
-    25: '25 %',
-    50: '50 %',
-    75: '75 %',
-    100: {
-      label: '<strong>Amplitude Q</strong>',
-    },
+  marks = {
+    [-1]: '-1',
+    0: { label: '<strong>0</strong>' },
+    1: '1',
   };
-  marksAmpI = {
-    0: {
-      label: '<strong>0 %</strong>',
-    },
-    25: '25 %',
-    50: '50 %',
-    75: '75 %',
-    100: {
-      label: '<strong>Amplitude I</strong>',
-    },
-  };
-  onIAmpChange(value) {
-    console.log(`onChange: ${value}`);
+
+  recalcCharts() {
     this.generateData();
     // update series data:
     this.updateOptions = {
       series: [
         {
-          data: this.data1,
+          data: this.dataI,
         },
         {
-          data: this.data2,
+          data: this.dataQ,
         },
         {
-          data: this.data3,
+          data: this.dataSumIQ,
         },
       ],
     };
     this.updateOptionsPolar = {
       series: [
         {
-          data: this.data4,
+          data: this.dataIQ,
         },
       ],
     };
-  }
-  onQAmpChange(value) {
-    console.log(`onChange: ${value}`);
-    this.generateData();
-    // update series data:
-    this.updateOptions = {
+    this.updateOptions3d = {
       series: [
         {
-          data: this.data1,
-        },
-        {
-          data: this.data2,
-        },
-        {
-          data: this.data3,
-        },
-      ],
-    };
-    this.updateOptionsPolar = {
-      series: [
-        {
-          data: this.data4,
+          data: this.data3D,
         },
       ],
     };
   }
 
   generateData() {
-    this.data1 = [];
-    this.data2 = [];
-    this.data3 = [];
-    this.data4 = [];
+    this.dataI = [];
+    this.dataQ = [];
+    this.dataSumIQ = [];
+    this.dataIQ = [];
+    this.data3D = [];
     this.xAxisData = [];
 
     var counter: number = 0;
@@ -112,76 +82,98 @@ export class IqModulationBasicComponent implements OnInit {
       this.xAxisData.push(counter / 40 + 'ms');
       counter++;
       var y1 =
-        Math.round(((this.ampI / 100) * Math.cos(i) + Number.EPSILON) * 1000) /
-        1000;
+        Math.round((this.ampI * Math.cos(i) + Number.EPSILON) * 1000) / 1000;
       var y2 =
-        Math.round(((this.ampQ / 100) * Math.sin(i) + Number.EPSILON) * 1000) /
-        1000;
+        Math.round((this.ampQ * Math.sin(i) + Number.EPSILON) * 1000) / 1000;
       var y3 = Math.round((y1 + y2 + Number.EPSILON) * 1000) / 1000;
-      this.data1.push(y1);
-      this.data2.push(y2);
-      this.data3.push(y3);
-      this.data4.push([
-        Math.round((Math.sqrt(y1 ** 2 + y2 ** 2) + Number.EPSILON) * 100) / 100,
-        Math.round(
-          ((Math.atan2(y1, y2) / (2 * Math.PI)) * 360 + Number.EPSILON) * 100
-        ) / 100,
-      ]);
+
+      this.dataI.push(y1);
+      this.dataQ.push(y2);
+      this.dataSumIQ.push(y3);
+      this.dataIQ.push([y1, y2]);
+
+      this.data3D.push([y2, counter / 40, y1]);
     }
   }
 
   ngOnInit(): void {
     this.generateData();
-    this.optionsPolar = {
-      title: {
-        text: 'Phasor Diagram of IQ Data',
+    interval(1000).subscribe(() => this.recalcCharts());
+    this.options3d = {
+      tooltip: {
+        show: false,
       },
-      legend: {
-        top: '5px',
-        orient: 'horizontal',
-        borderColor: '#fff',
-        borderWidth: 1,
-        textStyle: {
-          fontSize: 16,
+      axisPointer: {
+        show: false,
+      },
+
+      toolbox: {
+        feature: {
+          restore: {},
         },
       },
-      polar: {},
-      tooltip: {
-        trigger: 'axis',
-        // axisPointer: {
-        //   type: 'cross',
-        // },
-      },
-      angleAxis: {
+      backgroundColor: '#fff',
+      xAxis3D: {
         type: 'value',
-        min: 0,
-        max: 360,
-        startAngle: 0,
-        clockwise: false,
+        name: 'Q',
+        min: -1.1,
+        max: 1.1,
       },
-      radiusAxis: {
-        min: 0,
-        max: 1.5,
+      yAxis3D: {
+        type: 'value',
+        name: 'Time',
+      },
+      zAxis3D: {
+        type: 'value',
+        name: 'I',
+        min: -1.1,
+        max: 1.1,
+      },
+      grid3D: {
+        boxWidth: 100,
+        boxDepth: 250,
+        viewControl: {
+          beta: 55,
+          alpha: 10,
+          projection: 'orthographic',
+        },
       },
       series: [
         {
-          coordinateSystem: 'polar',
-          name: 'Resulting Component',
-          type: 'line',
-          showSymbol: false,
-          data: this.data4,
-          color: '#fac858',
+          type: 'line3D',
+          data: this.data3D,
           lineStyle: {
-            width: 3,
+            width: 4,
           },
         },
       ],
-      animationDuration: 2000,
+    };
+    this.optionsPolar = {
+      media: {
+        query: {
+          aspectRatio: '1/1',
+        },
+      },
+      xAxis: {
+        name: 'I',
+        min: -1.1,
+        max: 1.1,
+      },
+      yAxis: {
+        name: 'Q',
+        min: -1.1,
+        max: 1.1,
+      },
+      series: [
+        {
+          type: 'line',
+          showSymbol: false,
+          clip: true,
+          data: this.dataIQ,
+        },
+      ],
     };
     this.options = {
-      title: {
-        text: 'IQ-Addition',
-      },
       legend: {
         // align: 'left',
         // left: '10px',
@@ -212,7 +204,6 @@ export class IqModulationBasicComponent implements OnInit {
       toolbox: {
         feature: {
           restore: {},
-          saveAsImage: {},
         },
       },
       tooltip: {
@@ -232,7 +223,7 @@ export class IqModulationBasicComponent implements OnInit {
         {
           name: 'In-Phase Component',
           type: 'line',
-          data: this.data1,
+          data: this.dataI,
           showSymbol: false,
           lineStyle: {
             width: 1,
@@ -241,7 +232,7 @@ export class IqModulationBasicComponent implements OnInit {
         {
           name: 'Quadrature Component',
           type: 'line',
-          data: this.data2,
+          data: this.dataQ,
           lineStyle: {
             width: 1,
           },
@@ -250,7 +241,7 @@ export class IqModulationBasicComponent implements OnInit {
         {
           name: 'Resulting Component',
           type: 'line',
-          data: this.data3,
+          data: this.dataSumIQ,
           lineStyle: {
             width: 3,
           },
