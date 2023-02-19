@@ -15,7 +15,7 @@ export const APP_MENUS: AppMenu[] = [
     text: 'Home',
   },
   {
-    path: '/iq-modulation',
+    path: '/iq-modulation/iq-modulation',
     icon: 'bar-chart',
     text: 'IQ Modulation',
   },
