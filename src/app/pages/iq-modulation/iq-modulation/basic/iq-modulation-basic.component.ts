@@ -98,15 +98,8 @@ export class IqModulationBasicComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateData();
-    interval(1000).subscribe(() => this.recalcCharts());
+    // interval(1000).subscribe(() => this.recalcCharts());
     this.options3d = {
-      tooltip: {
-        show: false,
-      },
-      axisPointer: {
-        show: false,
-      },
-
       toolbox: {
         feature: {
           restore: {},
@@ -118,16 +111,34 @@ export class IqModulationBasicComponent implements OnInit {
         name: 'Q',
         min: -1.1,
         max: 1.1,
+        axisLabel: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
       },
       yAxis3D: {
         type: 'value',
         name: 'Time',
+        axisLabel: {
+          formatter: '{value} ms',
+        },
+        axisTicks: {
+          show: false,
+        },
       },
       zAxis3D: {
         type: 'value',
         name: 'I',
         min: -1.1,
         max: 1.1,
+        axisLabel: {
+          show: false,
+        },
+        axisLine: {
+          interval: 2,
+        },
       },
       grid3D: {
         boxWidth: 100,
@@ -145,6 +156,7 @@ export class IqModulationBasicComponent implements OnInit {
           lineStyle: {
             width: 4,
           },
+          animation: false,
         },
       ],
     };
@@ -153,6 +165,12 @@ export class IqModulationBasicComponent implements OnInit {
         query: {
           aspectRatio: '1/1',
         },
+      },
+      grid: {
+        left: '30px',
+        right: '20px',
+        bottom: '30px',
+        top: '30px',
       },
       xAxis: {
         name: 'I',
@@ -184,6 +202,12 @@ export class IqModulationBasicComponent implements OnInit {
         textStyle: {
           fontSize: 16,
         },
+      },
+      grid: {
+        left: '30px',
+        right: '20px',
+        bottom: '30px',
+        top: '30px',
       },
       xAxis: {
         data: this.xAxisData,

@@ -1,6 +1,6 @@
 <div nz-row nzJustify="space-between" nzAlign="top">
   <div nz-col nzSpan="4">
-      <h2>Change Amplitudes</h2>
+      <h2>Change Amplitude</h2>
       <h3>Amplitude I</h3>
       <nz-slider
         [(ngModel)]="ampI"
@@ -33,24 +33,26 @@
   </div>
 </div>
 <nz-divider></nz-divider>
-<div nz-row nzAlign="top" nzJustify="space-evenly">
-    <div style='width:300px'>
-    <h2>Phasor Diagram of IQ Values</h2>
-      <div
-        echarts
-        [options]="optionsPolar"
-        [theme]="'light'"
-        [merge]="updateOptionsPolar"
-        ></div>
-    </div>
+<!-- <div nz-row nzAlign="top" nzJustify="space-evenly"> -->
+<!--     <div style='width:380px'> -->
+<!--     <h2>Phasor Diagram of IQ Values</h2> -->
+<!--       <div -->
+<!--         echarts -->
+<!--         [options]="optionsPolar" -->
+<!--         [theme]="'light'" -->
+<!--         [merge]="updateOptionsPolar" -->
+<!--         class="demo-chart" -->
+<!--         ></div> -->
+<!--     </div> -->
 
-  <div style='width:800px'>
-    <h2>3D Diagram of IQ Values</h2>
-    <div
-      echarts
-      [options]="options3d"
-      [theme]="'light'"
-      [merge]="updateOptions3d"
-      ></div>
-  </div>
-</div>
+<!--   <div style='width:800px'> -->
+<!--     <h2>3D Diagram of IQ Values</h2> -->
+<!--     <div -->
+<!--       echarts -->
+<!--       [options]="options3d" -->
+<!--       [theme]="'light'" -->
+<!--       [merge]="updateOptions3d" -->
+<!--       class="demo-chart" -->
+<!--       ></div> -->
+<!--   </div> -->
+<!-- </div> -->

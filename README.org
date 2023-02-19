@@ -1,0 +1,10 @@
+#+title: IQ-Simulator
+
+just another Angular app...
+
+Start with ~npm start~ and browse[[localhost:4200][ localhost:4200]]
+
+* Credits
+- [[https://echarts.apache.org/en/index.html][Echarts (Apache)]]
+- [[https://ng.ant.design/docs/introduce/en][ng-zorro]]
+- [[https://angular.io/][Angular.io]]
